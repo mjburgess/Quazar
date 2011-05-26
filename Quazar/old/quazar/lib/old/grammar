@@ -1,0 +1,36 @@
+name 		= alphanum | @!£$%^&#<>/\|`¬-_+
+core-access 	= *
+message 	= .name
+name-msg-call 	= :name.name
+blind-def   = name:
+type-aware-def = name.name:
+scope-aware-def = ~name.name: | ~name:
+name-call 	= :name
+label 		= 'name
+code-append = (
+code-close 	= )
+called-code = :(
+code-open   = '(
+q-interpolation = #(
+delayed-match = ?(
+path  = name/name
+infix 		= + | * | - | / | == | <= | >= | === 
+assignment 	= *= | += | /= | -= | =  
+compound 	= name name | name code-open
+mix 		= , 
+stop-decomp	= ...
+mix-up 	= ;
+mix-open	= [
+mix-close	= ]
+match 		= ?
+comment-open 	= //
+coment-close 	= \\
+scope-object 	= ~
+space 		= | \n
+
+------------------------------
+
+If not defined, assume label. //think about, if not then need ubq labeling syntax
+//ie. initial value of all variables are their labels...
+//if testing value, idiomatically use 'qualified_label
+//class defintions are always fine, since vars arent defined there

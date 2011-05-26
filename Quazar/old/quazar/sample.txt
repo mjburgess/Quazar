@@ -1,0 +1,205 @@
+using quazar.io
+using quazar.units
+
+module Actors (
+
+	(Location)
+		has x, y
+
+	(Personality)
+		must decide
+
+	(Wise)
+		uses Personality
+		
+		can publically (
+			decide
+		)
+		
+		can privately (
+			calculate 
+		)
+
+	(Wise) decide 
+		io.print 'Decided to ' + :calculate 
+
+	(Wise) calculate 
+		nb? add real code
+		'sleep'
+
+	(Person)
+		uses Location
+		
+		has (
+			age <years>
+			height <meters>
+			personality <Personality>
+		)
+		
+		can new, walk, eat, sleep
+
+	(Person) new 
+		io.print 'A New Person was Created!'
+		
+	(Person) walk distance
+		:x += distance
+		
+	(Person) personality 
+		nb default getter
+		:personality
+		
+	(Location) print 
+		io.print 'X is ' + :x + ' and Y is ' + :y
+)
+
+(~) EntryPoint env
+	nb! this is the entry point
+	Wise = new Wise 
+	Michael = new Person with :age = 21, :height = 1.8, :personality = Wise
+	walk Michael 10
+	print decide Michael personality
+
+
+--------------
+other oo- interfaces ('patterns'), etc.
+--------------
+
+/Tree/ (
+	has leaves
+	can grow
+)
+
+------
+lambda
+------
+
+f(x) x + 1
+
+fact(x) x within 0, 1 else x * fact(x - 1)
+
+--general func--
+
+module general (
+	() factorial x : is 0
+		0
+	() factorial x : is 1
+		1
+	() factorial x 
+		x * factorial x - 1
+
+
+	() greeting time : within 0, 18
+		'good evening'
+
+	() dosomething arg1, arg2 : is 3, is 4
+		io.print '3,4'
+		
+	//better to define as > however
+
+	(int : is 0) !
+		0
+	(int : is 1) !
+		1
+	(int)	!
+		:int * !(:int-1)
+
+	//cf
+
+	factorial 10
+
+	10!
+)
+---------------------------------------------------------------------------
+
+// threads, co-routes, etc. ?
+
+---------------------------------------------------------------------------
+
+(+pure) X
+	5
+	
+(+impure) Y
+	6
+	
+(+linkto X) Z
+	7
+	
+------------------ fnc modifiers
+
+(meters) Pow index
+	for index (
+		:meters *= :meters
+	)
+
+(years) asWeeks
+		:years * 52
+
+() greeting ( //omittable
+	if quazar.time.now asHours within 0, 18 (
+		io.print 'good evening'
+	) else (
+		io.print 'good morning'
+	)
+) //omitable
+
+
+(left) add right (
+	left + right
+)
+
+---definining a fnc modifier
+
+(+with) table name 
+	//...
+
+	//decorator
+(+with) qwak 
+	function = reflect + 
+	unless function returns <map<string, list>> 
+		io.print 'fail'
+
+//property
+(+property)  
+	/qwak/ (
+		returns <map<string, list>>
+	)
+	
+--------------------
+syntax
+--------------------
+hour = quazar.time.now asHours 
+
+inspect var 
+	if within 12, 18 
+		print 'good afternoon'
+	if within 0, 18
+		print 'good evening'
+	else 
+		print 'good morning'
+----
+
+map   = {'one' => 1, 2 => 'two', 3}
+list  = [1,2,3]
+tuple = (1,2)
+
+mymap = new map 
+mymap associate 'one', 1 //etc.
+
+----
+
+strong http lib support
+---
+
+use quazar.http.server.basic
+use quazar.http.status
+use quazar.mvc.view
+
+server = new basic_server with :port = 80
+start server, myapp
+
+(+with qwak) myapp
+	{'200 OK', [], []} //etc.
+
+(+qwak) myMvcApp
+	{status.ok, view.display 'myfile.qhtml'} //etc.
+------
